@@ -14,7 +14,7 @@ from scripts.aws import start_instances, stop_instance_by_ip
 class FacebookSpider(Spider):
   name = 'fb_spider'
   allowed_domains = ["facebook.com"]
-  state = {'count': 0}
+  count = 0
   start_urls = ["https://www.facebook.com/directory/people"]
   redis = StrictRedis()
 
@@ -36,8 +36,6 @@ class FacebookSpider(Spider):
     start_instances(1)
 
   def start_requests(self):
-    print self.state
-    self.state['count'] = 0
     r = Request(
       url='https://www.facebook.com/directory/people',
     )
@@ -64,8 +62,8 @@ class FacebookSpider(Spider):
       if href:
         absolute_href = urljoin(response.url, href)
         if re.match(self.directory_links_regex, absolute_href):
-          self.state['count'] += 1
-          request = Request(absolute_href, callback=self.parse)
+          self.count += 1
+          request = Request(absolute_href, callback=self.parse, meta={'count': self.count})
           yield request
         elif re.match(self.people_links_regex, href):
           item = FbnamesItem()

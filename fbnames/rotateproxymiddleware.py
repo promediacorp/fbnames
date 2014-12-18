@@ -2,11 +2,10 @@ from scripts.aws import start_instances, stop_instances
 
 class RotateProxyMiddleware(object):
   def process_request(self, request, spider):
-    print spider.state
-    proxy = self._get_next_proxy(spider)
+    proxy = self._get_next_proxy(request, spider)
     request.meta['proxy'] = proxy
 
-  def _get_next_proxy(self, spider):
+  def _get_next_proxy(self, request, spider):
     redis = spider.redis
     size = redis.llen('plist')
     if size == 0:
@@ -18,7 +17,7 @@ class RotateProxyMiddleware(object):
       q, next_proxy = redis.blpop('plist')
       redis.rpush('plist', next_proxy)
     else:
-      index = spider.state.get('count', 0) % size
+      index = request.meta['count'] % size
       next_proxy = redis.lindex('plist', index)
     proxy = "http://%s:6969" % next_proxy
     print 'using proxy:', proxy
