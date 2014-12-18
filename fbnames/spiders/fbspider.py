@@ -6,7 +6,6 @@ from redis import StrictRedis
 
 import requests
 from StringIO import StringIO
-from PIL import Image
 import lxml.html as lx
 from urlparse import urljoin
 
