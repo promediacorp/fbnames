@@ -1,7 +1,5 @@
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.spider import BaseSpider
-#from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
-from scrapy.selector import HtmlXPathSelector
 from fbnames.items import FbnamesItem
 from scrapy.contrib.linkextractors import LinkExtractor
 
