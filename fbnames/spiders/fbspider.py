@@ -62,6 +62,7 @@ class FacebookSpider(Spider):
       if href:
         absolute_href = urljoin(response.url, href)
         if re.match(self.directory_links_regex, absolute_href):
+          self.state['count'] += 1
           request = Request(absolute_href, callback=self.parse)
           yield request
         elif re.match(self.people_links_regex, href):
