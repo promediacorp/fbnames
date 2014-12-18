@@ -38,6 +38,7 @@ class FacebookSpider(Spider):
   def start_requests(self):
     r = Request(
       url='https://www.facebook.com/directory/people',
+      meta={'count': 0}
     )
     return [r]
 
