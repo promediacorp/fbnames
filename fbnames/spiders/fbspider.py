@@ -36,6 +36,7 @@ class FacebookSpider(Spider):
     start_instances(1)
 
   def start_requests(self):
+    print self.state
     self.state['count'] = 0
     r = Request(
       url='https://www.facebook.com/directory/people',
