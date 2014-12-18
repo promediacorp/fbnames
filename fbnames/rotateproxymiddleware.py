@@ -18,7 +18,7 @@ class RotateProxyMiddleware(object):
       q, next_proxy = redis.blpop('plist')
       redis.rpush('plist', next_proxy)
     else:
-      index = spider.state['count'] % size
+      index = spider.state.get('count', 0) % size
       next_proxy = redis.lindex('plist', index)
     proxy = "https://%s:6969" % next_proxy
     return proxy
