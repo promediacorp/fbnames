@@ -12,7 +12,9 @@ class RotateProxyMiddleware(object):
       print 'no available proxies.'
       print 'firing up 3 new AWS instances...'
       i = start_instances(3)
-      next_proxy = redis.blpop('plist') # wait a second
+      q, next_proxy = redis.blpop('plist') # wait until one is online
+      # immediately push it back onto the list
+      redis.rpush('plist', next_proxy)
     else:
       index = spider.state['count'] % size
       next_proxy = redis.lindex('plist', index)
