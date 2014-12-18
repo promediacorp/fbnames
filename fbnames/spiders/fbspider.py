@@ -14,7 +14,7 @@ from scripts.aws import start_instances, stop_instance_by_ip
 class FacebookSpider(Spider):
   name = 'fb_spider'
   allowed_domains = ["facebook.com"]
-  state = {}
+  state = {'count': 0}
   start_urls = ["https://www.facebook.com/directory/people"]
   redis = StrictRedis()
 
@@ -47,7 +47,7 @@ class FacebookSpider(Spider):
     # handle potential Captchas here
     if 'Security Check' in response.body:
       # resubmit request & stop processing
-      print '>>> hit a security check...'
+      print '>>> hit a security check... removing proxy'
       proxy = response.request.meta.get('proxy')
       if proxy:
         self.remove_proxy(proxy)
