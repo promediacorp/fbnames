@@ -10,7 +10,7 @@ conn = boto.ec2.connect_to_region("us-east-1", **aws_creds)
 
 def start_instances(count):
   e = conn.run_instances(
-    'ami-fc573594',
+    'ami-c65b39ae',
     key_name='aws_promedia',
     instance_type='t2.micro',
     subnet_id='subnet-1c07ef37',
