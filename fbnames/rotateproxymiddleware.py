@@ -17,9 +17,7 @@ class RotateProxyMiddleware(object):
       q, next_proxy = redis.blpop('plist')
       redis.rpush('plist', next_proxy)
     else:
-      print request.meta
       index = request.meta['count'] % size
       next_proxy = redis.lindex('plist', index)
     proxy = "http://%s:6969" % next_proxy
-    print 'using proxy:', proxy
     return proxy

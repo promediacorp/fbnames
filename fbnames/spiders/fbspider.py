@@ -31,9 +31,11 @@ class FacebookSpider(Spider):
     # remove the proxy from the list;
     # terminate proxy;
     # fire up a new proxy
-    redis.lrem('plist', 0, ip)
-    stop_instance_by_ip(ip)
-    start_instances(1)
+    res = self.redis.lrem('plist', 0, ip)
+    if res > 0:
+      # only start a new instance if the remove actually worked
+      stop_instance_by_ip(ip)
+      start_instances(1)
 
   def start_requests(self):
     r = Request(
