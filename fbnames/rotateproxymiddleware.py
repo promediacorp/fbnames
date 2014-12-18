@@ -2,7 +2,7 @@ from scripts.aws import start_instances, stop_instances
 
 class RotateProxyMiddleware(object):
   def process_request(self, request, spider):
-    print dir(spider)
+    print spider.state
     proxy = self._get_next_proxy(spider)
     request.meta['proxy'] = proxy
 
