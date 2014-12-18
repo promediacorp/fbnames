@@ -21,4 +21,5 @@ class RotateProxyMiddleware(object):
       index = spider.state.get('count', 0) % size
       next_proxy = redis.lindex('plist', index)
     proxy = "https://%s:6969" % next_proxy
+    print 'using proxy:', proxy
     return proxy
