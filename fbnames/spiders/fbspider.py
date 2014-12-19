@@ -18,7 +18,7 @@ class FacebookSpider(Spider):
   directory_links_regex = r'.*/directory/people.*'
   people_links_regex = r'.*\.facebook\.com/[a-zA-Z0-9\.]+$'
 
-  def __init__(self, debug=False, remote=False, *args, **kwargs):
+  def __init__(self, debug=None, remote=False, *args, **kwargs):
     if debug:
       print 'debug mode on'
       self.allowed_domains = ["localhost:5000"]
