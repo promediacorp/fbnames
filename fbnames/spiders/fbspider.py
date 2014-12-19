@@ -13,19 +13,24 @@ from scripts.aws import start_instances, stop_instance_by_ip
 
 class FacebookSpider(Spider):
   name = 'fb_spider'
-  allowed_domains = ["facebook.com"]
   count = 0
-  start_urls = ["https://www.facebook.com/directory/people"]
-  redis = StrictRedis()
 
   directory_links_regex = r'.*/directory/people.*'
   people_links_regex = r'.*\.facebook\.com/[a-zA-Z0-9\.]+$'
 
-  # proxy_ips = [
-  #   'https://54.172.41.190',
-  #   'https://54.174.135.141',
-  #   'https://54.175.43.166',
-  # ]
+  def __init__(self, debug=False, remote=False, *args, **kwargs):
+    if debug:
+      print 'debug mode on'
+      self.allowed_domains = ["localhost:5000"]
+      self.start_urls = ["http://localhost:5000/directory/people"]
+    else:
+      self.allowed_domains = ["facebook.com"]
+      self.start_urls = ["https://www.facebook.com/directory/people"]
+
+    if remote:
+      self.redis = StrictRedis('54.172.41.190')
+    else:
+      self.redis = StrictRedis()
 
   def remove_proxy(self, ip):
     # remove the proxy from the list;
@@ -34,7 +39,9 @@ class FacebookSpider(Spider):
     res = self.redis.lrem('plist', 0, ip)
     if res > 0:
       # only start a new instance if the remove actually worked
+      print 'removing proxy', ip
       stop_instance_by_ip(ip)
+      print 'starting new proxy...'
       start_instances(1)
 
   def start_requests(self):
@@ -50,9 +57,10 @@ class FacebookSpider(Spider):
     # handle potential Captchas here
     if 'Security Check' in response.body:
       # resubmit request & stop processing
-      print '>>> hit a security check... removing proxy'
+      print 'hit a security check...'
       proxy = response.request.meta.get('proxy')
       if proxy:
+        print 'attemping to remove proxy', proxy
         self.remove_proxy(proxy)
       yield response.request
       return

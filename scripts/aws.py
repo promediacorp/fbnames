@@ -26,7 +26,7 @@ def stop_instance_by_ip(ip):
   for r in res:
     instances.extend(r.instances)
   for i in instances:
-    if i.ip_address == ip:
+    if i.private_ip_address == ip:
       stop_instances([i.id])
 
 def stop_instances(list_of_ids):

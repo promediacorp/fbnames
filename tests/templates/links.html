@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>Test</title>
+</head>
+<body>
+<h1>{{ count }}</h1>
+{% if check %}
+<strong>Security Check</strong><br>
+{% endif %}
+<ul>
+{% for link in links %}
+<li><a href="{{ link['href'] }}">{{ link['text'] }}</a></li>&nbsp;
+{% endfor %}
+</ul>
+</body>
+</html>
